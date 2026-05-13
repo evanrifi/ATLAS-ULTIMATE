@@ -1,0 +1,8 @@
+discord.py[voice]
+motor
+dnspython
+python-dotenv
+aiohttp
+certifi
+yt-dlp
+google-generativeai

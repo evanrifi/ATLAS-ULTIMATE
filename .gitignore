@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+
+# Logs
+logs/
+*.log
+
+# Bot specific
+bot.lock
+cookies.txt
+Lavalink.jar
+Lavalink_new.jar
+application.yml
+
+# OS
+.DS_Store
+Thumbs.db

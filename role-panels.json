@@ -1,0 +1,84 @@
+{
+  "guilds": {
+    "1474938766824050883": {
+      "panels": [
+        {
+          "id": "gender",
+          "title": "Gender ⚧️",
+          "description": "Choose a label that best describes you",
+          "placeholder": "Choose gender",
+          "color": 5865209,
+          "exclusive": true,
+          "bodyLines": [
+            "`♂️` **Male**",
+            "`♀️` **Female**"
+          ],
+          "options": [
+            { "label": "Male", "emoji": "♂️", "roleId": "1490387829329760537" },
+            { "label": "Female", "emoji": "♀️", "roleId": "1490387713067716719" }
+          ]
+        },
+        {
+          "id": "situation",
+          "title": "Situation 🏳️‍🌈",
+          "description": "Choose your situation",
+          "placeholder": "Choose situation",
+          "color": 16738740,
+          "exclusive": true,
+          "bodyLines": [
+            "`💑` **Taken**",
+            "`🙋` **Single**",
+            "`🙅` **Complicated**"
+          ],
+          "options": [
+            { "label": "Taken", "emoji": "💑", "roleId": "1490388150021787749" },
+            { "label": "Single", "emoji": "🙋", "roleId": "1490388227008495636" },
+            { "label": "Complicated", "emoji": "🙅", "roleId": "1490388264954236969" }
+          ]
+        },
+        {
+          "id": "personality",
+          "title": "Personality 👤",
+          "description": "Choose a personality that best describes you",
+          "placeholder": "Choose personality",
+          "color": 3037795,
+          "exclusive": true,
+          "bodyLines": [
+            "`🕴️` **Introvert**",
+            "`👨‍💻` **Extrovert**",
+            "`✨` **Toxic**",
+            "`🧘` **Calm**"
+          ],
+          "options": [
+            { "label": "Introvert", "emoji": "🕴️", "roleId": "1490388831093133342" },
+            { "label": "Extrovert", "emoji": "👨‍💻", "roleId": "1490388877683458178" },
+            { "label": "Toxic", "emoji": "✨", "roleId": "1494474199702437918" },
+            { "label": "Calm", "emoji": "🧘", "roleId": "1490388918875586560" }
+          ]
+        },
+        {
+          "id": "games",
+          "title": "Games 🎮",
+          "description": "Ping roles for games you play. **You can have several** — pick one from the menu, then open it again for another game.",
+          "placeholder": "Pick a game role",
+          "color": 3447003,
+          "exclusive": false,
+          "bodyLines": [
+            "`🎯` **Free Fire**",
+            "`⛏️` **Minecraft**" ,
+            "`⚡` **Valorant**",
+            "`🔴` **Among Us**",
+            "`🧱` **ROBLOX**"
+          ],
+          "options": [
+            { "label": "Free Fire", "emoji": "🎯", "roleId": "1490385666956071052" },
+            { "label": "Minecraft", "emoji": "⛏️", "roleId": "1490385868115017861" },
+            { "label": "Valorant", "emoji": "⚡", "roleId": "1490385926407454934" },
+            { "label": "Among Us", "emoji": "🔴", "roleId": "1490385791103402116" },
+            { "label": "Roblox", "emoji": "🧱", "roleId": "1490385975745052762" }
+          ]
+        }
+      ]
+    }
+  }
+}
