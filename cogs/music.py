@@ -27,16 +27,17 @@ YTDL_OPTIONS = {
     'no_warnings': True,
     'extract_flat': False,
     'skip_download': True,
-    'source_address': '0.0.0.0',
     'youtube_include_dash_manifest': False,
     'youtube_include_hls_manifest': False,
-    'cookiefile': 'cookies.txt' if os.path.exists('cookies.txt') else None,
+    'cookiefile': os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt') if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt')) else None,
 }
 
-if os.path.exists('cookies.txt'):
-    logger.info("🍪 Found cookies.txt - Using it for YouTube requests.")
+# Diagnostic logging for cookies
+COOKIE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt')
+if os.path.exists(COOKIE_PATH):
+    logger.info(f"🍪 Found cookies.txt at {COOKIE_PATH} - Size: {os.path.getsize(COOKIE_PATH)} bytes")
 else:
-    logger.warning("⚠️ No cookies.txt found - Some videos might be blocked.")
+    logger.warning(f"⚠️ No cookies.txt found at {COOKIE_PATH}")
 
 FFMPEG_OPTIONS = {
     'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
