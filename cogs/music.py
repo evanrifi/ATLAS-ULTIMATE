@@ -224,46 +224,63 @@ class Music(commands.Cog):
         return None
 
     async def fetch_track_info(self, query):
-        logger.info(f"Fetching track info for: {query}")
+        logger.info(f"🔍 Fetching track info for: {query}")
         if "open.spotify.com" in query:
             spotify_query = await self.get_spotify_info(query)
             if spotify_query:
                 query = spotify_query
-                logger.info(f"Spotify track resolved to: {query}")
+                logger.info(f"✅ Spotify track resolved to: {query}")
             else:
-                logger.warning(f"Failed to resolve Spotify link: {query}")
+                logger.warning(f"❌ Failed to resolve Spotify link: {query}")
                 return {"error": "Could not resolve Spotify link. Make sure it's a public track or album."}
 
         loop = asyncio.get_event_loop()
-        with yt_dlp.YoutubeDL(YTDL_OPTIONS) as ydl:
-            try:
+        
+        # Try with cookies first
+        try:
+            with yt_dlp.YoutubeDL(YTDL_OPTIONS) as ydl:
                 info = await loop.run_in_executor(None, lambda: ydl.extract_info(query, download=False))
-                if not info:
-                    return {"error": "No results found for this query."}
-                
-                if 'entries' in info:
-                    if not info['entries']:
-                        return {"error": "No entries found in the search result."}
-                    info = info['entries'][0]
-                
-                return {
-                    'url': info.get('url') or info.get('webpage_url'),
-                    'title': info.get('title', 'Unknown'),
-                    'author': info.get('uploader', info.get('channel', 'Unknown Channel')),
-                    'duration': info.get('duration', 0),
-                    'webpage': info.get('webpage_url', ''),
-                    'thumbnail': info.get('thumbnail', ''),
-                }
-            except Exception as e:
-                logger.error(f"❌ YTDL Error for query '{query}': {e}")
-                err_str = str(e)
-                if "403" in err_str:
-                    return {"error": "YouTube blocked this request (403). The bot might need fresh cookies.txt or a different IP."}
-                elif "sign in" in err_str.lower() or "age verification" in err_str.lower():
-                    return {"error": "This video requires age verification. Cookies are loaded but might be invalid or expired."}
-                elif "not found" in err_str.lower():
-                    return {"error": "Video not found or is unavailable."}
-                return {"error": f"Search/Format Error: {err_str[:200]}"}
+                if info:
+                    if 'entries' in info:
+                        info = info['entries'][0]
+                    
+                    return {
+                        'url': info.get('url') or info.get('webpage_url'),
+                        'title': info.get('title', 'Unknown'),
+                        'author': info.get('uploader', info.get('channel', 'Unknown Channel')),
+                        'duration': info.get('duration', 0),
+                        'webpage': info.get('webpage_url', ''),
+                        'thumbnail': info.get('thumbnail', ''),
+                    }
+        except Exception as e:
+            err_str = str(e)
+            logger.error(f"⚠️ YTDL Primary Attempt Failed: {err_str[:100]}")
+            
+            # Fallback search if primary fails (Try without ytsearch1 prefix if it was a URL)
+            if "youtube.com" in query or "youtu.be" in query:
+                try:
+                    logger.info("🔄 Retrying with direct URL extraction...")
+                    opts = YTDL_OPTIONS.copy()
+                    opts['default_search'] = 'auto'
+                    with yt_dlp.YoutubeDL(opts) as ydl:
+                        info = await loop.run_in_executor(None, lambda: ydl.extract_info(query, download=False))
+                        if info:
+                            return {
+                                'url': info.get('url'),
+                                'title': info.get('title'),
+                                'author': info.get('uploader'),
+                                'duration': info.get('duration', 0),
+                                'webpage': info.get('webpage_url', ''),
+                                'thumbnail': info.get('thumbnail', ''),
+                            }
+                except Exception as e2:
+                    logger.error(f"❌ Fallback also failed: {e2}")
+
+            if "403" in err_str:
+                return {"error": "YouTube blocked the bot (403). Try fresh cookies or wait a while."}
+            elif "sign in" in err_str.lower() or "age verification" in err_str.lower():
+                return {"error": "YouTube bot detection triggered. Please update cookies.txt with fresh ones from an active browser session."}
+            return {"error": f"Search/Format Error: {err_str[:200]}"}
 
     def build_player_embed(self, player):
         track = player.current
