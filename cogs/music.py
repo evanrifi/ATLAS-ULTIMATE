@@ -32,6 +32,11 @@ YTDL_OPTIONS = {
     'cookiefile': 'cookies.txt' if os.path.exists('cookies.txt') else None,
 }
 
+if os.path.exists('cookies.txt'):
+    logger.info("🍪 Found cookies.txt - Using it for YouTube requests.")
+else:
+    logger.warning("⚠️ No cookies.txt found - Some videos might be blocked.")
+
 FFMPEG_OPTIONS = {
     'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
     'options': '-vn',
