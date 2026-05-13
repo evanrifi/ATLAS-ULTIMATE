@@ -14,8 +14,9 @@ from utils.ui_views import ConfirmationView
 logger = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────
-#  Configuration
-# ─────────────────────────────────────────
+# Diagnostic logging for cookies
+COOKIE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt')
+
 YTDL_OPTIONS = {
     'format': 'bestaudio/best',
     'noplaylist': True,
@@ -33,8 +34,6 @@ YTDL_OPTIONS = {
     'cookiefile': COOKIE_PATH if os.path.exists(COOKIE_PATH) else None,
 }
 
-# Diagnostic logging for cookies
-COOKIE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt')
 if os.path.exists(COOKIE_PATH):
     logger.info(f"🍪 Found cookies.txt at {COOKIE_PATH} - Size: {os.path.getsize(COOKIE_PATH)} bytes")
 else:
