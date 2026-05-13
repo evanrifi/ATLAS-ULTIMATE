@@ -84,27 +84,29 @@ class GuildPlayer:
         self.start_time = time.time()
         
         logger.info(f"Attempting to play next: {self.current['title']}")
-        logger.info(f"Stream URL: {self.current['url'][:50]}...")
+        logger.info(f"Stream URL: {self.current['url'][:100]}...")
         
         try:
+            # Use absolute path for ffmpeg if possible, or just "ffmpeg"
             source = discord.FFmpegPCMAudio(self.current['url'], executable=FFMPEG_PATH, **FFMPEG_OPTIONS)
             source = discord.PCMVolumeTransformer(source, volume=self.volume)
             
+            if not self.voice_client:
+                logger.error("❌ Voice client is None in play_next!")
+                return
+
             def after_playing(error):
                 if error:
-                    logger.error(f"Player error in guild {self.guild_id}: {error}")
+                    logger.error(f"❌ Player error in guild {self.guild_id}: {error}")
                 else:
-                    logger.info(f"Finished playing: {self.current['title']}")
+                    logger.info(f"✅ Finished playing: {self.current['title']}")
                 coro = self.play_next()
                 asyncio.run_coroutine_threadsafe(coro, self.bot.loop)
 
-            if self.voice_client:
-                self.voice_client.play(source, after=after_playing)
-                logger.info(f"Playback started for: {self.current['title']}")
-                # Update the hub if it exists
-                # We'll implement this later
+            self.voice_client.play(source, after=after_playing)
+            logger.info(f"🎶 Playback started successfully for: {self.current['title']}")
         except Exception as e:
-            logger.error(f"Error starting playback for {self.current['title']}: {e}")
+            logger.error(f"❌ Error starting playback for {self.current['title']}: {e}")
             await self.play_next()
 
 # ─────────────────────────────────────────
@@ -251,15 +253,15 @@ class Music(commands.Cog):
                     'thumbnail': info.get('thumbnail', ''),
                 }
             except Exception as e:
-                logger.error(f"YTDL Error for query '{query}': {e}")
+                logger.error(f"❌ YTDL Error for query '{query}': {e}")
                 err_str = str(e)
                 if "403" in err_str:
                     return {"error": "YouTube blocked this request (403). The bot might need fresh cookies.txt or a different IP."}
-                elif "sign in" in err_str.lower():
-                    return {"error": "This video requires age verification or sign-in. Use cookies.txt."}
+                elif "sign in" in err_str.lower() or "age verification" in err_str.lower():
+                    return {"error": "This video requires age verification. Cookies are loaded but might be invalid or expired."}
                 elif "not found" in err_str.lower():
                     return {"error": "Video not found or is unavailable."}
-                return {"error": f"Search Error: {err_str[:200]}"}
+                return {"error": f"Search/Format Error: {err_str[:200]}"}
 
     def build_player_embed(self, player):
         track = player.current
