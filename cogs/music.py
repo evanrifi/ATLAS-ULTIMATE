@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 #  Configuration
 # ─────────────────────────────────────────
 YTDL_OPTIONS = {
-    'format': 'bestaudio/best',
+    'format': 'bestaudio[ext=m4a]/bestaudio/best[ext=mp4]/best',
     'noplaylist': True,
     'quiet': True,
     'default_search': 'ytsearch1',
