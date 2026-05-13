@@ -13,7 +13,6 @@ logs/
 
 # Bot specific
 bot.lock
-cookies.txt
 Lavalink.jar
 Lavalink_new.jar
 application.yml
