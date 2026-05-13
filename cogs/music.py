@@ -28,6 +28,8 @@ YTDL_OPTIONS = {
     'extract_flat': False,
     'skip_download': True,
     'source_address': '0.0.0.0',
+    'youtube_include_dash_manifest': False,
+    'youtube_include_hls_manifest': False,
     'cookiefile': 'cookies.txt' if os.path.exists('cookies.txt') else None,
 }
 
