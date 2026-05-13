@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 #  Configuration
 # ─────────────────────────────────────────
 YTDL_OPTIONS = {
-    'format': 'bestaudio/best',
+    'format': '251/140/250/249/bestaudio/best',
     'noplaylist': True,
     'quiet': True,
     'default_search': 'ytsearch1',
@@ -27,8 +27,9 @@ YTDL_OPTIONS = {
     'no_warnings': True,
     'extract_flat': False,
     'skip_download': True,
-    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'cachedir': False,
+    'youtube_include_dash_manifest': True,
+    'youtube_include_hls_manifest': True,
     'cookiefile': os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt') if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'cookies.txt')) else None,
 }
 
