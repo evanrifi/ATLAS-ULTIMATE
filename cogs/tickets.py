@@ -85,7 +85,7 @@ class Tickets(commands.Cog):
         self.bot.add_view(TicketCloseView())
 
     @discord.app_commands.command(name="setup_tickets", description="Deploy the support ticket panel")
-    @commands.has_permissions(administrator=True)
+    @discord.app_commands.checks.has_permissions(administrator=True)
     async def setup_tickets(self, interaction: discord.Interaction):
         embed = discord.Embed(
             title="🎫 ATLAS Support System",

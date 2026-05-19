@@ -135,7 +135,7 @@ class Roles(commands.Cog):
                 self.bot.add_view(PremiumRoleView(p))
 
     @discord.app_commands.command(name="post_roles", description="Post the self-assign role panels with professional UI")
-    @commands.has_permissions(administrator=True)
+    @discord.app_commands.checks.has_permissions(administrator=True)
     async def post_roles(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         data = load_role_panels()
@@ -165,13 +165,63 @@ class Roles(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
+        # 1. Assign Auto Role
         if Config.AUTO_ROLE_ID:
             role = member.guild.get_role(Config.AUTO_ROLE_ID)
             if role:
                 try:
                     await member.add_roles(role)
-                except:
-                    pass
+                    logger.info(f"✅ Automatically assigned role {role.name} to {member.name}")
+                except Exception as e:
+                    logger.warning(f"❌ Failed to assign auto-role to {member.name}: {e}")
+
+        # 2. Send Welcome Message
+        if Config.WELCOME_CHANNEL_ID:
+            channel = member.guild.get_channel(Config.WELCOME_CHANNEL_ID)
+            if channel:
+                from datetime import datetime
+                age = (datetime.utcnow() - member.created_at.replace(tzinfo=None)).days
+                account_age_str = f"{age} days ago" if age > 0 else "Today"
+                
+                # Color processing
+                color_val = 0x00E5FF
+                if Config.WELCOME_COLOR:
+                    try:
+                        color_val = int(Config.WELCOME_COLOR.strip("#"), 16)
+                    except:
+                        pass
+                
+                embed = discord.Embed(
+                    title=f"✨ Welcome to {member.guild.name}!",
+                    description=(
+                        f"Welcome to the community, {member.mention}! We're thrilled to have you join us.\n\n"
+                        f"📋 **Server Guidelines & Verification**:\n"
+                        f"• Be sure to read the rules carefully.\n"
+                        f"• Assign yourself self-roles in the server panels.\n"
+                        f"• Get verified if needed to access all rooms.\n\n"
+                        f"📈 **Community Statistics**:\n"
+                        f"• Member Position: **#{member.guild.member_count}**\n"
+                        f"• Account Age: `{account_age_str}`"
+                    ),
+                    color=color_val
+                )
+                embed.set_thumbnail(url=member.display_avatar.url)
+                
+                # Logo / Banner logic
+                if Config.WELCOME_LOGO_URL:
+                    embed.set_image(url=Config.WELCOME_LOGO_URL)
+                elif Config.BANNER_GIF_URL:
+                    embed.set_image(url=Config.BANNER_GIF_URL)
+                    
+                embed.set_footer(
+                    text="Atlas Ultimate • User Joined",
+                    icon_url=self.bot.user.display_avatar.url if self.bot.user else None
+                )
+                try:
+                    await channel.send(embed=embed)
+                    logger.info(f"✨ Successfully sent welcome message for {member.name} in channel {channel.name}")
+                except Exception as e:
+                    logger.error(f"❌ Failed to send welcome message for {member.name}: {e}")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Roles(bot))

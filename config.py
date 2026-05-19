@@ -31,6 +31,17 @@ class Config:
     MOD_LOG_CHANNEL_ID = int(os.getenv("MOD_LOG_CHANNEL_ID", "0"))
     AUTO_ROLE_ID = int(os.getenv("AUTO_ROLE_ID", "0"))
     
+    # XP / Levels Configuration
+    LEVEL_UP_CHANNEL_ID = int(os.getenv("LEVEL_UP_CHANNEL_ID", "0"))
+    ROLE_LEVEL_5 = int(os.getenv("ROLE_LEVEL_5", "0"))
+    ROLE_LEVEL_10 = int(os.getenv("ROLE_LEVEL_10", "0"))
+    ROLE_LEVEL_20 = int(os.getenv("ROLE_LEVEL_20", "0"))
+    
+    # Welcome Configuration
+    WELCOME_CHANNEL_ID = int(os.getenv("WELCOME_CHANNEL_ID", "0"))
+    WELCOME_LOGO_URL = os.getenv("WELCOME_LOGO_URL")
+    WELCOME_COLOR = os.getenv("WELCOME_COLOR", "00E5FF")
+    
     # Colors for embeds
     COLOR_PRIMARY = 0x2b2d31  # Discord dark theme color
     COLOR_SUCCESS = 0x57F287

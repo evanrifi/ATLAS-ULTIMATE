@@ -19,7 +19,7 @@ class General(commands.Cog):
         
         # Group commands by Cog
         for cog_name, cog in self.bot.cogs.items():
-            commands_list = cog.get_app_commands()
+            commands_list = list(cog.walk_app_commands())
             if not commands_list:
                 continue
                 
